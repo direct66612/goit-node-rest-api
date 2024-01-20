@@ -38,7 +38,27 @@ const addContact = async (name, email, phone) => {
   const readResult = await fs.readFile(contactsPath);
   const parseDate = JSON.parse(readResult);
   parseDate.push(newObj);
-  await fs.writeFile(contactsPath, JSON.stringify(parseDate));
+  await fs.writeFile(contactsPath, JSON.stringify(parseDate, null, 2));
   return newObj;
 };
-module.exports = { listContacts, getContactById, removeContact, addContact };
+const updateContactOperation = async (contactId, ...data) => {
+  const readResult = await fs.readFile(contactsPath);
+  const parseDate = JSON.parse(readResult);
+  const findEl = parseDate.find(({ id }) => id === contactId);
+  const indexEl = parseDate.indexOf(findEl);
+  parseDate.splice(indexEl, 1);
+  if (findEl === undefined) {
+    return null;
+  }
+  const elForChange = Object.assign(findEl, ...data);
+  parseDate.push(elForChange);
+  await fs.writeFile(contactsPath, JSON.stringify(parseDate, null, 2));
+  return elForChange;
+};
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContactOperation,
+};

@@ -3,7 +3,13 @@ const {
   getContactById,
   removeContact,
   addContact,
+  updateContactOperation,
 } = require("../services/contactsServices");
+
+const {
+  createContactSchema,
+  updateContactSchema,
+} = require("../schemas/contactsSchemas");
 
 const { asyncHandler } = require("../helpers/asyncHandler");
 
@@ -28,10 +34,35 @@ const deleteContact = async (req, res) => {
 };
 
 const createContact = async (req, res) => {
-  const { name, email, phone } = req.body;
+  const { value, error } = createContactSchema(req.body);
+  if (error) {
+    const { message } = error;
+    return res.status(400).json({ message });
+  }
+  const { name, email, phone } = value;
+  const newObj = await asyncHandler(addContact, name, email, phone);
+  return res.status(201).json(newObj);
 };
 
-const updateContact = (req, res) => {};
+const updateContact = async (req, res) => {
+  const { value, error } = updateContactSchema(req.body);
+  if (error) {
+    const { message } = error;
+    return res.status(400).json({ message });
+  }
+  if (Object.keys(value).length === 0) {
+    return res
+      .status(400)
+      .json({ message: "Body must have at least one field" });
+  }
+  const newObj = await asyncHandler(
+    updateContactOperation,
+    req.params.id,
+    value
+  );
+  if (!newObj) return res(404).json({ message: "Not found" });
+  res.status(200).json(newObj);
+};
 module.exports = {
   getAllContacts,
   getOneContact,
