@@ -2,58 +2,61 @@ const fs = require("fs").promises;
 const { v4 } = require("uuid");
 const path = require("path");
 const contactsPath = path.join("db", "contacts.json");
+const { Contacts } = require("../models/contactsModel");
 
 const listContacts = async () => {
-  const readResult = await fs.readFile(contactsPath, "utf-8");
-  return JSON.parse(readResult);
+  const readResult = await Contacts.find();
+  return readResult;
 };
 const getContactById = async (contactId) => {
-  const readResult = await fs.readFile(contactsPath);
-  const parseDate = JSON.parse(readResult);
-  const findEl = parseDate.find(({ id }) => id === contactId);
+  const findEl = Contacts.findById(contactId);
   if (findEl === undefined) {
     return null;
   }
   return findEl;
 };
 const removeContact = async (contactId) => {
-  const readResult = await fs.readFile(contactsPath);
-  const parseDate = JSON.parse(readResult);
-  const findEl = parseDate.find(({ id }) => id === contactId);
-  const indexEl = parseDate.indexOf(findEl);
-  parseDate.splice(indexEl, 1);
+  const findEl = Contacts.findByIdAndDelete(contactId);
   if (findEl === undefined) {
     return null;
   }
-  await fs.writeFile(contactsPath, JSON.stringify(parseDate, null, 2));
   return findEl;
 };
-const addContact = async (name, email, phone) => {
+const addContact = async (name, email, phone, favorite) => {
   const newObj = {
-    id: v4(),
     name,
     email,
     phone,
+    favorite,
   };
-  const readResult = await fs.readFile(contactsPath);
-  const parseDate = JSON.parse(readResult);
-  parseDate.push(newObj);
-  await fs.writeFile(contactsPath, JSON.stringify(parseDate, null, 2));
+  Contacts.create(newObj);
   return newObj;
 };
 const updateContactOperation = async (contactId, ...data) => {
-  const readResult = await fs.readFile(contactsPath);
-  const parseDate = JSON.parse(readResult);
-  const findEl = parseDate.find(({ id }) => id === contactId);
-  const indexEl = parseDate.indexOf(findEl);
-  parseDate.splice(indexEl, 1);
-  if (findEl === undefined) {
+  const findAndChangedEl = await Contacts.findByIdAndUpdate(
+    contactId,
+    ...data,
+    {
+      new: true,
+    }
+  );
+  if (findAndChangedEl === undefined) {
     return null;
   }
-  const elForChange = Object.assign(findEl, ...data);
-  parseDate.push(elForChange);
-  await fs.writeFile(contactsPath, JSON.stringify(parseDate, null, 2));
-  return elForChange;
+  return findAndChangedEl;
+};
+const updateStatusContactFavorite = async (contactId, ...data) => {
+  const findAndChangedEl = await Contacts.findByIdAndUpdate(
+    contactId,
+    ...data,
+    {
+      new: true,
+    }
+  );
+  if (findAndChangedEl === undefined) {
+    return null;
+  }
+  return findAndChangedEl;
 };
 module.exports = {
   listContacts,
@@ -61,4 +64,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContactOperation,
+  updateStatusContactFavorite,
 };
