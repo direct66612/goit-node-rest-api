@@ -1,5 +1,5 @@
 node_modules/
-envs/
+/envs
 .idea
 .vscode
 .DS_Store
