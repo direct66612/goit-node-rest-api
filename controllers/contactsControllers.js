@@ -4,14 +4,17 @@ const {
   removeContact,
   addContact,
   updateContactOperation,
+  updateStatusContactFavorite,
 } = require("../services/contactsServices");
 
 const {
   createContactSchema,
   updateContactSchema,
+  updateStatusContactSchema,
 } = require("../schemas/contactsSchemas");
 
 const { asyncHandler } = require("../helpers/asyncHandler");
+const { Contacts } = require("../models/contactsModel");
 
 const getAllContacts = async (req, res) => {
   res.status(200).json(await asyncHandler(listContacts));
@@ -39,8 +42,11 @@ const createContact = async (req, res) => {
     const { message } = error;
     return res.status(400).json({ message });
   }
-  const { name, email, phone } = value;
-  const newObj = await asyncHandler(addContact, name, email, phone);
+  const userExists = await Contacts.exists({ email: value.email });
+  if (userExists)
+    return res.status(409).json("User with this email already exists..");
+  const { name, email, phone, favorite } = value;
+  const newObj = await asyncHandler(addContact, name, email, phone, favorite);
   return res.status(201).json(newObj);
 };
 
@@ -63,10 +69,25 @@ const updateContact = async (req, res) => {
   if (!newObj) return res(404).json({ message: "Not found" });
   res.status(200).json(newObj);
 };
+const updateStatusContact = async (req, res) => {
+  const { value, error } = updateStatusContactSchema(req.body);
+  if (error) {
+    const { message } = error;
+    return res.status(400).json({ message });
+  }
+  const newEl = await asyncHandler(
+    updateStatusContactFavorite,
+    req.params.id,
+    value
+  );
+  if (!newEl) return res.status(404).json({ message: "Not found" });
+  res.status(200).json(newEl);
+};
 module.exports = {
   getAllContacts,
   getOneContact,
   deleteContact,
   createContact,
   updateContact,
+  updateStatusContact,
 };
