@@ -6,14 +6,13 @@ const signToken = (id) =>
   });
 
 const checkToken = (token) => {
-  if (!token) throw new Error("Not logged in..");
-
+  if (!token) throw new Error("Unauthorized");
   try {
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
     return id;
-  } catch (err) {
-    throw new Error("Not logged in..");
+  } catch (error) {
+    throw new Error("Unauthorized");
   }
 };
 

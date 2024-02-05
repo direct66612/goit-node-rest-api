@@ -1,8 +1,15 @@
 const { Contacts } = require("../models/contactsModel");
 
-const listContacts = async () => {
-  const readResult = await Contacts.find();
-  return readResult;
+const listContacts = async (query) => {
+  const page = query.page ? +query.page : 1;
+  const limit = query.limit ? +query.limit : 3;
+  const docsToSkip = (page - 1) * limit;
+
+  const getAllContacts = Contacts.find().where(query);
+
+  const newList = await getAllContacts.limit(limit);
+
+  return newList;
 };
 const getContactById = async (contactId) => {
   const findEl = Contacts.findById(contactId);

@@ -2,6 +2,15 @@ const { User } = require("../models/userModel");
 
 const { signToken } = require("../services/jwtServices");
 
+const getUserById = (id) => User.findById(id);
+
+const getUserByIdAndDeleteToken = async (id) => {
+  const updatedUser = await User.findById(id);
+  updatedUser.token = null;
+  await updatedUser.save();
+  return updatedUser;
+};
+
 const addUser = async (email, password) => {
   const newObj = {
     email,
@@ -31,4 +40,4 @@ const loginUser = async (email, password) => {
   return { user, token };
 };
 
-module.exports = { addUser, loginUser };
+module.exports = { getUserById, addUser, loginUser, getUserByIdAndDeleteToken };

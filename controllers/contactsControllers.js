@@ -17,7 +17,7 @@ const { asyncHandler } = require("../helpers/asyncHandler");
 const { Contacts } = require("../models/contactsModel");
 
 const getAllContacts = async (req, res) => {
-  res.status(200).json(await asyncHandler(listContacts));
+  res.status(200).json(await asyncHandler(listContacts, req.query));
 };
 
 const getOneContact = async (req, res) => {
