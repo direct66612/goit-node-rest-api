@@ -1,7 +1,3 @@
-const fs = require("fs").promises;
-const { v4 } = require("uuid");
-const path = require("path");
-const contactsPath = path.join("db", "contacts.json");
 const { Contacts } = require("../models/contactsModel");
 
 const listContacts = async () => {
