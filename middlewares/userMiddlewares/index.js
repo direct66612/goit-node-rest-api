@@ -4,4 +4,6 @@ const { userLogout } = require("./userLogout");
 
 const { userCurrent } = require("./userCurrent");
 
-module.exports = { protect, userLogout, userCurrent };
+const { allowFor } = require("./allowFor");
+
+module.exports = { protect, userLogout, userCurrent, allowFor };
