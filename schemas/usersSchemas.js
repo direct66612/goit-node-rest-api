@@ -10,7 +10,18 @@ const registerSchema = (data) =>
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#_\\$%\\^&\\*])(?=.{8,128})/
         )
         .required(),
+      subscription: Joi.string()
+        .valid("starter", "pro", "business")
+        .default("starter"),
     })
     .validate(data);
 
-module.exports = { registerSchema };
+const userUpdateSubscriptionSchema = (data) =>
+  Joi.object()
+    .options({ abortEarly: false })
+    .keys({
+      subscription: Joi.string().valid("starter", "pro", "business").required(),
+    })
+    .validate(data);
+
+module.exports = { registerSchema, userUpdateSubscriptionSchema };

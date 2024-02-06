@@ -15,8 +15,15 @@ const createContact = async (req, res) => {
   const userExists = await Contacts.exists({ email: value.email });
   if (userExists)
     return res.status(409).json("User with this email already exists..");
-  const { name, email, phone, favorite } = value;
-  const newObj = await asyncHandler(addContact, name, email, phone, favorite);
+  const { name, email, phone, favorite, owner } = value;
+  const newObj = await asyncHandler(
+    addContact,
+    name,
+    email,
+    phone,
+    favorite,
+    req.user
+  );
   return res.status(201).json(newObj);
 };
 

@@ -24,8 +24,8 @@ const userRegister = async (req, res) => {
         message: "Email in use",
       },
     });
-  const { email, password } = value;
-  const newObj = await asyncHandler(addUser, email, password);
+  const { email, password, subscription } = value;
+  const newObj = await asyncHandler(addUser, email, password, subscription);
   return res.status(201).json({
     Status: "201 Created",
     ContentType: "application/json",

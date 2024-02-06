@@ -10,7 +10,7 @@ const userLogout = async (req, res, next) => {
     const userId = checkToken(token);
     await getUserByIdAndDeleteToken(userId);
 
-    res.status(204).json({ Status: "204 No Content" });
+    res.sendStatus(204);
     next();
     if (!userId)
       res.status(401).json({

@@ -18,7 +18,6 @@ const userLogin = async (req, res) => {
       Status: "200 OK",
       ContentType: "application/json",
       ResponseBody: {
-        token: token,
         user: user,
       },
     });
