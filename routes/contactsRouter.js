@@ -1,4 +1,6 @@
 const express = require("express");
+const { protect } = require("../middlewares/userMiddlewares");
+
 const {
   getAllContacts,
   getOneContact,
@@ -9,6 +11,8 @@ const {
 } = require("../controllers/contactsControllers");
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(protect);
 
 contactsRouter.get("/", getAllContacts);
 
