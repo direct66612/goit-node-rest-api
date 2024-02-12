@@ -6,4 +6,12 @@ const { userCurrent } = require("./userCurrent");
 
 const { allowFor } = require("./allowFor");
 
-module.exports = { protect, userLogout, userCurrent, allowFor };
+const { uploadAvatar } = require("./uploadAvatar");
+
+module.exports = {
+  protect,
+  userLogout,
+  userCurrent,
+  allowFor,
+  uploadAvatar,
+};
