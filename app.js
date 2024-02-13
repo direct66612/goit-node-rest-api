@@ -44,3 +44,5 @@ app.use((err, req, res, next) => {
 app.listen(process.env.PORT, () => {
   console.log(`Server is running. Use our API on port: ${process.env.PORT}`);
 });
+
+module.exports = { app };
