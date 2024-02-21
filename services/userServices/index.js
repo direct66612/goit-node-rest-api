@@ -6,4 +6,12 @@ const { addUser } = require("./addUser");
 
 const { loginUser } = require("./loginUser");
 
-module.exports = { getUserById, addUser, loginUser, getUserByIdAndDeleteToken };
+const { updateAvatar } = require("./updateAvatar");
+
+module.exports = {
+  getUserById,
+  addUser,
+  loginUser,
+  getUserByIdAndDeleteToken,
+  updateAvatar,
+};

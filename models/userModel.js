@@ -1,5 +1,6 @@
 const { model, Schema } = require("mongoose");
 const { compare, genSalt, hash } = require("bcrypt");
+const gravatar = require("gravatar");
 
 const userSchema = Schema(
   {
@@ -21,6 +22,7 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
+    avatarURL: String,
   },
   {
     versionKey: false,
@@ -28,6 +30,12 @@ const userSchema = Schema(
 );
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
+
+  if (this.isNew)
+    this.avatarURL = gravatar.url(this.email, {
+      protocol: "https",
+      d: "robohash",
+    });
 
   const salt = await genSalt(10);
   this.password = await hash(this.password, salt);

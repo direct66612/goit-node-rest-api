@@ -13,13 +13,11 @@ const userLogin = async (req, res) => {
   }
   const { email, password } = value;
   try {
-    const { user, token } = await loginUser(email, password);
+    const { user } = await loginUser(email, password);
     res.status(200).json({
       Status: "200 OK",
       ContentType: "application/json",
-      ResponseBody: {
-        user: user,
-      },
+      user: user,
     });
   } catch (error) {
     res.status(401).json({
