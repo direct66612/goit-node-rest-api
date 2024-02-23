@@ -8,10 +8,13 @@ const { allowFor } = require("./allowFor");
 
 const { uploadAvatar } = require("./uploadAvatar");
 
+const { checkVerification } = require("./checkVerification");
+
 module.exports = {
   protect,
   userLogout,
   userCurrent,
   allowFor,
   uploadAvatar,
+  checkVerification,
 };

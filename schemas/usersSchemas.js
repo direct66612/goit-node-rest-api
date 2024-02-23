@@ -24,4 +24,16 @@ const userUpdateSubscriptionSchema = (data) =>
     })
     .validate(data);
 
-module.exports = { registerSchema, userUpdateSubscriptionSchema };
+const userVerifyResendSchema = (data) =>
+  Joi.object()
+    .options({ abortEarly: false })
+    .keys({
+      email: Joi.string().email().required(),
+    })
+    .validate(data);
+
+module.exports = {
+  registerSchema,
+  userUpdateSubscriptionSchema,
+  userVerifyResendSchema,
+};
